@@ -9,4 +9,6 @@
     <string name="btn_text_save">SAVE</string>
     <string name="note_text_no_lovely_places_found_yet">No Lovely Places found! Add yours!</string>
     <string name="image_content_description">image</string>
+
+    <string name="google_maps_api_key">AIzaSyDIpI2PRpcL4H4ZX-cXbJSYGH0MCG4soTw</string>
 </resources>

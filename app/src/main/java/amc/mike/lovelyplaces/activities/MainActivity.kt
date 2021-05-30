@@ -4,6 +4,7 @@ import amc.mike.lovelyplaces.R
 import amc.mike.lovelyplaces.adapters.LovelyPlacesAdapter
 import amc.mike.lovelyplaces.database.DatabaseHandler
 import amc.mike.lovelyplaces.models.LovelyPlaceModel
+import amc.mike.lovelyplaces.utils.SwipeToDeleteCallback
 import amc.mike.lovelyplaces.utils.SwipeToEditCallback
 import android.app.Activity
 import android.content.Intent
@@ -53,6 +54,18 @@ class MainActivity : AppCompatActivity() {
 
         val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
         editItemTouchHelper.attachToRecyclerView(rv_lovely_places_list)
+
+        val deleteSwipeHandler = object : SwipeToDeleteCallback(this){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = rv_lovely_places_list.adapter as LovelyPlacesAdapter
+                adapter.removeAt(viewHolder.adapterPosition)
+
+                getLovelyPlacesListFromLocalDB()
+            }
+        }
+
+        val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
+        deleteItemTouchHelper.attachToRecyclerView(rv_lovely_places_list)
     }
 
     private fun getLovelyPlacesListFromLocalDB(){

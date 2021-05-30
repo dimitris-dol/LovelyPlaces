@@ -3,6 +3,7 @@ package amc.mike.lovelyplaces.adapters
 import amc.mike.lovelyplaces.R
 import amc.mike.lovelyplaces.activities.AddLovelyPlaceActivity
 import amc.mike.lovelyplaces.activities.MainActivity
+import amc.mike.lovelyplaces.database.DatabaseHandler
 import amc.mike.lovelyplaces.models.LovelyPlaceModel
 import android.app.Activity
 import android.content.Context
@@ -66,6 +67,15 @@ open class LovelyPlacesAdapter(
                     onClickListener!!.onClick(position,model)
                 }
             }
+        }
+    }
+
+    fun removeAt(position: Int){
+        val dbHandler = DatabaseHandler(context)
+        val isDeleted = dbHandler.deleteLovelyPlace(list[position])
+        if (isDeleted > 0){
+            list.removeAt(position)
+            notifyItemRemoved(position)
         }
     }
 

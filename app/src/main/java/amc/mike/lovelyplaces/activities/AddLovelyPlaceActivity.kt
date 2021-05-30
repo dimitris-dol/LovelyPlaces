@@ -20,6 +20,10 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -51,6 +55,10 @@ class AddLovelyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
         toolbar_add_place.setNavigationOnClickListener {
             onBackPressed()
+        }
+
+        if(!Places.isInitialized()){
+            Places.initialize(this@AddLovelyPlaceActivity, resources.getString(R.string.google_maps_api_key))
         }
 
         if(intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)){
@@ -86,6 +94,7 @@ class AddLovelyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         et_date.setOnClickListener(this)
         tv_add_image.setOnClickListener(this)
         btn_save.setOnClickListener(this)
+        et_location.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -152,6 +161,20 @@ class AddLovelyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
             }
+            R.id.et_location ->{
+                try{
+                    val fields = listOf(
+                        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG,
+                        Place.Field.ADDRESS
+                    )
+                    val intent =
+                        Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                            .build(this@AddLovelyPlaceActivity)
+                    startActivityForResult(intent, PLACE_RQ)
+                }catch(e:Exception){
+                    e.printStackTrace()
+                }
+            }
         }
     }
 
@@ -184,6 +207,11 @@ class AddLovelyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                 Log.e("Saved image: ", "Path :: $saveImageToInternalStorage")
 
                 iv_place_image.setImageBitmap(thumbnail)
+            }else if(requestCode == PLACE_RQ){
+                val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+                et_location.setText(place.address)
+                mLatitude = place.latLng!!.latitude
+                mLongitude = place.latLng!!.longitude
             }
         }
     }
@@ -270,5 +298,6 @@ class AddLovelyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         private const val GALLERY = 1
         private const val CAMERA = 2
         private const val IMAGE_DIRECTORY = "LovelyPlacesImages"
+        private const val PLACE_RQ = 3
     }
 }
