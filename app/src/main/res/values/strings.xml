@@ -11,4 +11,6 @@
     <string name="image_content_description">image</string>
 
     <string name="google_maps_api_key">AIzaSyDIpI2PRpcL4H4ZX-cXbJSYGH0MCG4soTw</string>
+    <string name="btn_text_view_on_map">VIEW ON MAP</string>
+    <string name="add_place_select_current_location_text">SELECT CURRENT LOCATION</string>
 </resources>

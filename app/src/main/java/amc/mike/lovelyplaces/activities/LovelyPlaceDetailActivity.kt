@@ -2,6 +2,7 @@ package amc.mike.lovelyplaces.activities
 
 import amc.mike.lovelyplaces.R
 import amc.mike.lovelyplaces.models.LovelyPlaceModel
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -31,6 +32,12 @@ class LovelyPlaceDetailActivity : AppCompatActivity() {
             iv_place_image.setImageURI(Uri.parse(lovelyPlaceDetailModel.image))
             tv_description.text = lovelyPlaceDetailModel.description
             tv_location.text = lovelyPlaceDetailModel.location
+
+            btn_view_on_map.setOnClickListener{
+                val intent = Intent(this, MapActivity::class.java)
+                intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS, lovelyPlaceDetailModel)
+                startActivity(intent)
+            }
 
         }
     }
